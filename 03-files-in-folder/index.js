@@ -7,14 +7,20 @@ fs.readdir(pathToDir, { withFileTypes: true }, (err, files) => {
   files.forEach((item) => {
     if (item.isFile()) {
       const pathToFile = path.join(item.path, item.name);
-      console.log(
-        path.parse(pathToFile).name,
-        ' - ',
-        path.parse(pathToFile).ext.slice(1),
-        ' - ',
-        fs.statSync(pathToFile).size,
-        'B',
-      );
+      fs.stat(pathToFile, (err, stats) => {
+        if (err) {
+          console.log(err.message);
+        }
+
+        console.log(
+          path.parse(pathToFile).name,
+          ' - ',
+          path.parse(pathToFile).ext.slice(1),
+          ' - ',
+          stats.size,
+          'B',
+        );
+      });
     }
   });
 });
